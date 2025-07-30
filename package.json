@@ -1,0 +1,32 @@
+{
+  "name": "excelviz",
+  "version": "1.0.0",
+  "description": "Excel Visualization Application",
+  "main": "index.js",
+  "scripts": {
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm start",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "excel",
+    "visualization",
+    "react",
+    "nodejs",
+    "mongodb"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "mongodb": "^6.17.0",
+    "tailwind.config.js": "^1.0.6"
+  }
+}
