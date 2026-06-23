@@ -6,9 +6,9 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 // Async thunks
 export const login = createAsyncThunk(
   'auth/login',
-  async (credentials, { rejectWithValue }) => {
+  async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_URL}/auth/login`, credentials);
+      const response = await axios.post(`${API_URL}/auth/login`, userData);
       localStorage.setItem('token', response.data.token);
       return response.data;
     } catch (error) {
@@ -44,6 +44,24 @@ export const getProfile = createAsyncThunk(
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.msg || 'Failed to get profile');
+    }
+  }
+);
+
+export const updateProfile = createAsyncThunk(
+  'auth/updateProfile',
+  async (profileData, { rejectWithValue, getState }) => {
+    try {
+      const { token } = getState().auth;
+      const response = await axios.put(`${API_URL}/auth/profile`, profileData, {
+        headers: {
+          'x-auth-token': token,
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.msg || 'Failed to update profile');
     }
   }
 );
@@ -117,9 +135,21 @@ const authSlice = createSlice({
         state.token = null;
         state.user = null;
         localStorage.removeItem('token');
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
 export const { logout, clearError } = authSlice.actions;
-export default authSlice.reducer; 
+export default authSlice.reducer;

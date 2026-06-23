@@ -88,4 +88,4 @@ const historySlice = createSlice({
 });
 
 export const { clearError } = historySlice.actions;
-export default historySlice.reducer; 
+export default historySlice.reducer;

@@ -1,13 +1,19 @@
-const { verify } = require('jsonwebtoken');
+const { auth } = require('../config/firebase');
 
-module.exports = function (req, res, next) {
+module.exports = async function (req, res, next) {
   const token = req.header('x-auth-token');
   if (!token) return res.status(401).json({ msg: 'No token, authorization denied' });
+  
   try {
-    const decoded = verify(token, process.env.JWT_SECRET);
-    req.user = decoded.user;
+    const decodedToken = await auth.verifyIdToken(token);
+    req.user = { 
+      id: decodedToken.uid, 
+      email: decodedToken.email, 
+      name: decodedToken.name || 'Anonymous User' 
+    };
     next();
   } catch (err) {
-    res.status(401).json({ msg: 'Token is not valid' });
+    console.error('Firebase Auth token verification failed:', err.message);
+    res.status(401).json({ msg: 'Token is not valid or expired' });
   }
 };

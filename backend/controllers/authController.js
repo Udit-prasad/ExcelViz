@@ -1,119 +1,209 @@
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const axios = require('axios');
+const { auth, db } = require('../config/firebase');
+
+const apiKeyMissingMessage = (action) =>
+  `Server is missing FIREBASE_WEB_API_KEY inside backend/.env. Please configure this key to enable user ${action}.`;
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
-  
+  const apiKey = process.env.FIREBASE_WEB_API_KEY;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ msg: 'Name, email, and password are required' });
+  }
+
+  if (!apiKey) {
+    return res.status(400).json({ msg: apiKeyMissingMessage('registration') });
+  }
+
   try {
-    // Check if user already exists
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ msg: 'User already exists' });
-    }
+    const userRecord = await auth.createUser({
+      email,
+      password,
+      displayName: name
+    });
 
-    // Create new user
-    user = new User({ name, email, password });
-    
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-    
-    await user.save();
+    await db.collection('users').doc(userRecord.uid).set({
+      name,
+      email,
+      createdAt: new Date().toISOString()
+    });
 
-    // Create JWT token
-    const payload = { 
-      user: { 
-        id: user.id, 
-        isAdmin: user.isAdmin 
-      } 
-    };
-    
-    jwt.sign(
-      payload, 
-      process.env.JWT_SECRET, 
-      { expiresIn: '7d' }, 
-      (err, token) => {
-        if (err) throw err;
-        res.json({ 
-          token,
-          user: {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            isAdmin: user.isAdmin
-          }
-        });
-      }
+    const loginResponse = await axios.post(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
+      { email, password, returnSecureToken: true }
     );
+
+    res.json({
+      token: loginResponse.data.idToken,
+      user: {
+        id: userRecord.uid,
+        name,
+        email
+      }
+    });
   } catch (err) {
-    console.error('Register error:', err);
-    res.status(500).json({ msg: 'Server error' });
+    console.error('Firebase Register error:', err.response?.data?.error?.message || err.message);
+    res.status(400).json({ msg: err.response?.data?.error?.message || err.message || 'Registration failed' });
   }
 };
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  
+  const apiKey = process.env.FIREBASE_WEB_API_KEY;
+
+  if (!email || !password) {
+    return res.status(400).json({ msg: 'Email and password are required' });
+  }
+
+  if (!apiKey) {
+    return res.status(400).json({ msg: apiKeyMissingMessage('login') });
+  }
+
   try {
-    // Check if user exists
-    let user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ msg: 'Invalid Credentials' });
-    }
-
-    // Check password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid Credentials' });
-    }
-
-    // Create JWT token
-    const payload = { 
-      user: { 
-        id: user.id, 
-        isAdmin: user.isAdmin 
-      } 
-    };
-    
-    jwt.sign(
-      payload, 
-      process.env.JWT_SECRET, 
-      { expiresIn: '7d' }, 
-      (err, token) => {
-        if (err) throw err;
-        res.json({ 
-          token,
-          user: {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            isAdmin: user.isAdmin
-          }
-        });
-      }
+    const response = await axios.post(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
+      { email, password, returnSecureToken: true }
     );
+
+    const { idToken, localId } = response.data;
+    const userRef = db.collection('users').doc(localId);
+    const userDoc = await userRef.get();
+    let name = 'User';
+
+    if (userDoc.exists) {
+      name = userDoc.data().name || name;
+    } else {
+      const firebaseUser = await auth.getUser(localId);
+      name = firebaseUser.displayName || name;
+      await userRef.set({
+        name,
+        email,
+        createdAt: new Date().toISOString()
+      });
+    }
+
+    res.json({
+      token: idToken,
+      user: {
+        id: localId,
+        name,
+        email
+      }
+    });
   } catch (err) {
-    console.error('Login error:', err);
-    res.status(500).json({ msg: 'Server error' });
+    const errorMsg = err.response?.data?.error?.message;
+    console.error('Firebase Login error:', errorMsg || err.message);
+
+    if (['EMAIL_NOT_FOUND', 'INVALID_PASSWORD', 'INVALID_LOGIN_CREDENTIALS'].includes(errorMsg)) {
+      return res.status(400).json({ msg: 'Invalid Credentials' });
+    }
+
+    res.status(500).json({ msg: errorMsg || 'Authentication failed' });
+  }
+};
+
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  const apiKey = process.env.FIREBASE_WEB_API_KEY;
+
+  if (!email) {
+    return res.status(400).json({ msg: 'Email is required' });
+  }
+
+  if (!apiKey) {
+    return res.status(400).json({ msg: apiKeyMissingMessage('password reset') });
+  }
+
+  try {
+    await axios.post(
+      `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${apiKey}`,
+      { requestType: 'PASSWORD_RESET', email }
+    );
+    res.json({ msg: 'Password reset email sent' });
+  } catch (err) {
+    console.error('Firebase Forgot password error:', err.response?.data?.error?.message || err.message);
+    res.status(500).json({ msg: 'Failed to dispatch password reset email. Ensure the email is registered.' });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { token, password } = req.body;
+  const apiKey = process.env.FIREBASE_WEB_API_KEY;
+
+  if (!token || !password) {
+    return res.status(400).json({ msg: 'Reset token and new password are required' });
+  }
+
+  if (!apiKey) {
+    return res.status(400).json({ msg: apiKeyMissingMessage('password reset') });
+  }
+
+  try {
+    await axios.post(
+      `https://identitytoolkit.googleapis.com/v1/accounts:resetPassword?key=${apiKey}`,
+      { oobCode: token, newPassword: password }
+    );
+    res.json({ msg: 'Password reset successful' });
+  } catch (err) {
+    console.error('Firebase Reset password error:', err.response?.data?.error?.message || err.message);
+    res.status(400).json({ msg: 'Invalid or expired reset token' });
   }
 };
 
 const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
-    if (!user) {
-      return res.status(404).json({ msg: 'User not found' });
+    const userDoc = await db.collection('users').doc(req.user.id).get();
+    if (!userDoc.exists) {
+      return res.status(404).json({ msg: 'User profile not found' });
     }
-    res.json(user);
+
+    res.json({
+      id: userDoc.id,
+      ...userDoc.data()
+    });
   } catch (err) {
-    console.error('Get profile error:', err);
+    console.error('Firebase Get profile error:', err.message);
     res.status(500).json({ msg: 'Server error' });
+  }
+};
+
+const updateProfile = async (req, res) => {
+  const { name, email } = req.body;
+
+  if (!name || !email) {
+    return res.status(400).json({ msg: 'Name and email are required' });
+  }
+
+  try {
+    await auth.updateUser(req.user.id, {
+      displayName: name,
+      email
+    });
+
+    const userRef = db.collection('users').doc(req.user.id);
+    await userRef.set({
+      name,
+      email,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+
+    const userDoc = await userRef.get();
+    res.json({
+      id: userDoc.id,
+      ...userDoc.data()
+    });
+  } catch (err) {
+    console.error('Firebase Update profile error:', err.message);
+    res.status(400).json({ msg: err.message || 'Profile update failed' });
   }
 };
 
 module.exports = {
   register,
   login,
-  getProfile
+  forgotPassword,
+  resetPassword,
+  getProfile,
+  updateProfile
 };

@@ -17,16 +17,11 @@
     "visualization",
     "react",
     "nodejs",
-    "mongodb"
+    "firebase"
   ],
   "author": "Your Name",
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^7.6.0"
-  },
-  "dependencies": {
-    "cookie-parser": "^1.4.7",
-    "mongodb": "^6.17.0",
-    "tailwind.config.js": "^1.0.6"
   }
 }

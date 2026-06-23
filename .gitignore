@@ -1,6 +1,43 @@
-node_modules
-node_modules
-node_modules
-node_modules
-node_modules
-node_modules
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+
+# Environments and Secrets
+.env
+.env.local
+.env.*.local
+*.env
+*.key
+*.pem
+*.cert
+*secret*
+!backend/.env.example
+!frontend/.env.example
+
+# Credentials / Service Accounts
+credentials*.json
+serviceAccountKey.json
+firebase-adminsdk*.json
+
+# IDE / Tooling
+.agents/
+.claude/
+.vscode/
+.idea/
+skills-lock.json
+
+# Application Uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Media / OS files
+base64_design.txt
+*.mp4
+*.avi
+*.mov
+*.wav
+*.mp3
+Thumbs.db
+.DS_Store

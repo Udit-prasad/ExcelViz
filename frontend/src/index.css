@@ -1,33 +1,152 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* Custom premium composite font to render numbers as sans-serif and body text as Georgia */
+@font-face {
+  font-family: 'GeorgiaNumbersSans';
+  src: local('Georgia'), local('Times New Roman'), local('serif');
+}
+
+@font-face {
+  font-family: 'GeorgiaNumbersSans';
+  src: local('Plus Jakarta Sans'), local('Inter'), local('Arial'), local('sans-serif');
+  unicode-range: U+0030-0039; /* Unicode digits 0 to 9 */
+}
+
+/* Scoped overrides for the public marketing website */
+.public-website {
+  font-family: 'GeorgiaNumbersSans', Georgia, serif !important;
+}
+
+.public-website .font-body {
+  font-family: 'GeorgiaNumbersSans', Georgia, serif !important;
+}
+
+.public-website .font-heading,
+.public-website h1,
+.public-website h2,
+.public-website h3,
+.public-website h4,
+.public-website h5,
+.public-website h6 {
+  font-family: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+.public-website button,
+.public-website input,
+.public-website select,
+.public-website textarea,
+.public-website a.bg-gradient-to-r,
+.public-website a.bg-white\/5 {
+  font-family: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
 
 /* Tailwind base styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: 'Roboto', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+@layer base {
+  body {
+    @apply font-sans antialiased text-slate-800 bg-slate-50 transition-colors duration-500;
+  }
+  
+  /* Dark mode global overrides */
+  html.dark body {
+    @apply text-slate-200 bg-[#0B0F19];
+    background-color: #0B0F19;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight;
+  }
 }
 
-h1, h2, h3, h4, h5, h6, .font-heading {
-  font-family: 'Poppins', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+@layer utilities {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+  
+  .glass-dark {
+    @apply bg-slate-800/40 backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
+
+  .glass-panel {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-indigo-500;
+  }
+
+  .glow-accent {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, rgba(99, 102, 241, 0.04) 70%, transparent 100%);
+
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+  }
 }
 
-/* Use Cambria for numbers, Georgia for words */
-body, input, textarea, select, button {
-  font-family: 'Georgia', serif;
+/* Custom chart container logic */
+.chart-container {
+  width: 100%;
+  height: auto;
+  min-height: 400px;
 }
 
-.numerical, .number, .num, [data-font="number"] {
-  font-family: 'Cambria', 'Georgia', serif;
+@media (max-width: 640px) {
+  .chart-container {
+    min-height: 300px;
+  }
 }
 
-/* Automatically apply Cambria to numbers in text */
-body {
-  /* Use a font-variant-numeric if supported, but Cambria for numbers is not standard CSS. So, use a span wrapper for numbers in components for best effect. */
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0F19; /* dark track matching page base */
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #06b6d4 0%, #6366f1 100%) !important;
+  border-radius: 9999px;
+  border: 2px solid #0B0F19;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.6) !important;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #22d3ee 0%, #818cf8 100%) !important;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.9) !important;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-} 
+/* AeroGlass High-Fidelity Input Controls & Autofill Styling */
+input:not([type="submit"]) {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 8px rgba(6, 182, 212, 0.35), 0 0 15px rgba(255, 255, 255, 0.2) !important;
+  caret-color: #06b6d4 !important;
+}
+
+/* High-contrast premium placeholders */
+input::placeholder {
+  color: rgba(148, 163, 184, 0.7) !important;
+  text-shadow: none !important;
+  font-weight: 500 !important;
+}
+
+/* Force browser autofill to remain transparent-dark and glowing white */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #0b0f19 inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 1px solid rgba(6, 182, 212, 0.35) !important;
+  text-shadow: 0 0 8px rgba(6, 182, 212, 0.35) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}

@@ -1,18 +1,18 @@
 const multer = require('multer');
 const { diskStorage } = require('multer');
-const { extname } = require('path');
+const { basename, extname } = require('path');
 
 const storage = diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
+    cb(null, `${Date.now()}-${basename(file.originalname)}`);
   }
 });
 
 const fileFilter = (req, file, cb) => {
-  const ext = extname(file.originalname);
+  const ext = extname(file.originalname).toLowerCase();
   if (ext !== '.xls' && ext !== '.xlsx') {
     return cb(new Error('Only Excel files are allowed'), false);
   }

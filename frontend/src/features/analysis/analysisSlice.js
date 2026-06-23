@@ -27,26 +27,6 @@ export const uploadFile = createAsyncThunk(
   }
 );
 
-export const saveAnalysis = createAsyncThunk(
-  'analysis/saveAnalysis',
-  async (analysisData, { rejectWithValue, getState }) => {
-    try {
-      const { token } = getState().auth;
-      const config = {
-        headers: {
-          'x-auth-token': token,
-          'Content-Type': 'application/json',
-        },
-      };
-
-      const response = await axios.post(`${API_URL}/analysis/save`, analysisData, config);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.msg || 'Failed to save analysis');
-    }
-  }
-);
-
 export const generateChart = createAsyncThunk(
   'analysis/generateChart',
   async (chartConfig, { rejectWithValue, getState }) => {
@@ -72,12 +52,11 @@ const initialState = {
   columns: [],
   analysisData: null,
   chartData: null,
-  chartType: '2d',
+  chartType: 'bar',
   xAxis: '',
   yAxis: '',
   loading: false,
   error: null,
-  success: null,
 };
 
 const analysisSlice = createSlice({
@@ -104,8 +83,15 @@ const analysisSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-    clearSuccess: (state) => {
-      state.success = null;
+    loadExistingAnalysis: (state, action) => {
+      const analysis = action.payload;
+      state.uploadedFile = analysis.fileName;
+      state.columns = analysis.columns || [];
+      state.analysisData = analysis;
+      state.chartData = analysis.chartData || null;
+      state.chartType = analysis.chartType || 'bar';
+      state.xAxis = analysis.xAxis || '';
+      state.yAxis = analysis.yAxis || '';
     },
   },
   extraReducers: (builder) => {
@@ -125,19 +111,6 @@ const analysisSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Save Analysis
-      .addCase(saveAnalysis.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(saveAnalysis.fulfilled, (state, action) => {
-        state.loading = false;
-        state.success = 'Analysis saved successfully';
-      })
-      .addCase(saveAnalysis.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
       // Generate Chart
       .addCase(generateChart.pending, (state) => {
         state.loading = true;
@@ -145,7 +118,11 @@ const analysisSlice = createSlice({
       })
       .addCase(generateChart.fulfilled, (state, action) => {
         state.loading = false;
-        state.chartData = action.payload;
+        state.chartData = action.payload.chartData;
+        state.analysisData = {
+          ...state.analysisData,
+          ...action.payload.analysis,
+        };
       })
       .addCase(generateChart.rejected, (state, action) => {
         state.loading = false;
@@ -159,8 +136,8 @@ export const {
   setXAxis, 
   setYAxis, 
   clearAnalysis, 
-  clearError, 
-  clearSuccess 
+  clearError,
+  loadExistingAnalysis
 } = analysisSlice.actions;
 
-export default analysisSlice.reducer; 
+export default analysisSlice.reducer;

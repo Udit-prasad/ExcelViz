@@ -1,7 +1,6 @@
-const Analysis = require('../models/Analysis');
+const { db } = require('../config/firebase');
 const { readFile, utils } = require('xlsx');
 const { join } = require('path');
-const fs = require('fs');
 
 const uploadExcel = async (req, res) => {
   if (!req.file) return res.status(400).json({ msg: 'No file uploaded' });
@@ -10,24 +9,31 @@ const uploadExcel = async (req, res) => {
     const workbook = readFile(filePath);
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
-    const jsonData = utils.sheet_to_json(worksheet, { header: 1 });
+    
+    // Get data with headers (first row becomes column headers)
+    const jsonData = utils.sheet_to_json(worksheet);
+    
+    // Extract column headers from the keys of the first data row
+    const columns = jsonData.length > 0 ? Object.keys(jsonData[0]) : [];
 
-    // Get column headers
-    const columns = jsonData[0];
-
-    // Save analysis record (without chart yet)
-    const analysis = new Analysis({
+    // Save analysis record (without chart yet) in Firestore
+    const analysisData = {
       user: req.user.id,
       fileName: req.file.filename,
       originalName: req.file.originalname,
-      columns
+      columns,
+      createdAt: new Date().toISOString()
+    };
+
+    const docRef = await db.collection('analyses').add(analysisData);
+
+    res.json({
+      columns,
+      data: jsonData,
+      analysisId: docRef.id,
+      fileName: req.file.filename,
+      originalName: req.file.originalname
     });
-    await analysis.save();
-
-    // Optionally delete file after parsing
-    // fs.unlinkSync(filePath);
-
-    res.json({ columns, analysisId: analysis._id, fileName: req.file.filename });
   } catch (err) {
     console.error('Upload error:', err);
     res.status(500).json({ msg: 'Server error' });
