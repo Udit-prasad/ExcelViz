@@ -46,46 +46,12 @@ const VisualPlaceholder = ({ title, subtitle, isVideo = false }) => {
 
 // 1. Workbook Ingestion Mockup Visual
 const ParsingMockup = () => (
-  <div className="bg-[#0B0F19]/90 border border-white/10 rounded-2xl p-6 relative overflow-hidden h-[260px] md:h-[280px] flex flex-col justify-between shadow-inner group-hover:border-cyan-500/20 transition-colors duration-300">
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(6,182,212,0.05),transparent_60%)] pointer-events-none" />
-    <div className="space-y-4">
-      {/* File Row */}
-      <div className="flex items-center justify-between p-3 bg-white/5 border border-white/5 rounded-xl">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 rounded-lg flex items-center justify-center font-bold text-xs">XLS</div>
-          <div>
-            <h5 className="text-white text-xs font-bold leading-none">Q4_Revenue_Model.xlsx</h5>
-            <span className="text-[10px] text-slate-500 mt-1 block">1.4 MB • Excel Workbook</span>
-          </div>
-        </div>
-        <span className="text-[10px] text-emerald-400 font-extrabold uppercase bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/25">Parsed</span>
-      </div>
-      {/* Detail Grid */}
-      <div className="grid grid-cols-3 gap-2">
-        <div className="bg-white/5 p-2 rounded-lg text-center border border-white/5">
-          <span className="text-slate-500 text-[9px] block uppercase font-bold">Sheets</span>
-          <span className="text-white text-sm font-black font-heading mt-0.5 block">03</span>
-        </div>
-        <div className="bg-white/5 p-2 rounded-lg text-center border border-white/5">
-          <span className="text-slate-500 text-[9px] block uppercase font-bold">Columns</span>
-          <span className="text-white text-sm font-black font-heading mt-0.5 block">14</span>
-        </div>
-        <div className="bg-white/5 p-2 rounded-lg text-center border border-white/5">
-          <span className="text-slate-500 text-[9px] block uppercase font-bold">Rows</span>
-          <span className="text-white text-sm font-black font-heading mt-0.5 block">1,842</span>
-        </div>
-      </div>
-      {/* Sheets selectors list */}
-      <div className="flex gap-1.5 pt-1">
-        {['✓ SalesData', '✓ OutliersList', '✓ ForecastLogs'].map((sheet, i) => (
-          <span key={i} className="text-[9px] bg-cyan-950/20 border border-cyan-500/15 text-cyan-400 font-semibold px-2 py-0.5 rounded-full">{sheet}</span>
-        ))}
-      </div>
-    </div>
-    <div className="text-[10px] text-slate-505 border-t border-white/5 pt-3 flex items-center gap-1.5 font-bold uppercase">
-      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-      Ready for 3D Visualizer Mapping
-    </div>
+  <div className="border border-white/5 rounded-[24px] overflow-hidden shadow-2xl bg-slate-950 group">
+    <img 
+      src="/assets/image2.png" 
+      alt="Excel workbook secure ingestion pipeline" 
+      className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+    />
   </div>
 );
 
@@ -135,74 +101,23 @@ const VisualizationMockup = () => (
 
 // 3. Immersive 3D Chart Mockup Visual (Isometric Projection Grid)
 const ThreeDMockup = () => (
-  <div className="bg-[#0B0F19]/90 border border-white/10 rounded-2xl p-6 relative overflow-hidden h-[260px] md:h-[280px] flex flex-col justify-between shadow-inner group-hover:border-cyan-500/20 transition-colors duration-300">
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.06),transparent_75%)] pointer-events-none" />
-    <div className="flex justify-between items-center border-b border-white/5 pb-2.5">
-      <span className="text-[10px] text-slate-450 font-bold uppercase tracking-wider font-heading">Three.js WebGL spatial grid</span>
-      <span className="text-[10px] bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 font-bold px-2 py-0.5 rounded">3D Orbit</span>
-    </div>
-    {/* 3D Isometric Columns SVG */}
-    <div className="my-auto h-32 relative flex items-center justify-center">
-      <svg className="w-44 h-32 text-cyan-400" viewBox="0 0 100 80" fill="none">
-        {/* Isometric Grid Floor */}
-        <polygon points="50,75 85,55 50,35 15,55" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-        <line x1="32.5" y1="65" x2="67.5" y2="45" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-        <line x1="67.5" y1="65" x2="32.5" y2="45" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-        
-        {/* Isometric Pillars */}
-        {/* Pillar 1 (Left - Indigo) */}
-        <polygon points="25,50 35,45 35,25 25,30" fill="#4338CA" opacity="0.6" />
-        <polygon points="35,45 45,50 45,30 35,25" fill="#4F46E5" opacity="0.7" />
-        <polygon points="25,30 35,25 45,30 35,35" fill="#818CF8" />
-
-        {/* Pillar 2 (Center - Cyan) */}
-        <polygon points="40,62 50,57 50,22 40,27" fill="#0E7490" opacity="0.6" />
-        <polygon points="50,57 60,62 60,27 50,22" fill="#06B6D4" opacity="0.7" />
-        <polygon points="40,27 50,22 60,27 50,32" fill="#22D3EE" />
-
-        {/* Pillar 3 (Right - Rose/Magenta) */}
-        <polygon points="55,52 65,47 65,37 55,42" fill="#BE185D" opacity="0.6" />
-        <polygon points="65,47 75,52 75,42 65,37" fill="#DB2777" opacity="0.7" />
-        <polygon points="55,42 65,37 75,42 65,47" fill="#F472B6" />
-      </svg>
-    </div>
-    <div className="text-[10px] text-slate-500 flex justify-between items-center font-bold uppercase">
-      <span>Render: WebGL Engine</span>
-      <span>GPU active (60fps)</span>
-    </div>
+  <div className="border border-white/5 rounded-[24px] overflow-hidden shadow-2xl bg-slate-950 group">
+    <img 
+      src="/assets/image3.png" 
+      alt="Immersive Three.js 3D Coordinate Grid Space" 
+      className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+    />
   </div>
 );
 
 // 4. AI-Powered Insights Mockup Visual
 const AIInsightsMockup = () => (
-  <div className="bg-[#0B0F19]/90 border border-white/10 rounded-2xl p-6 relative overflow-hidden h-[260px] md:h-[280px] flex flex-col justify-between shadow-inner group-hover:border-cyan-500/20 transition-colors duration-300">
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(6,182,212,0.05),transparent_60%)] pointer-events-none" />
-    <div className="flex justify-between items-center border-b border-white/5 pb-2.5">
-      <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-        <span className="text-[10px] text-white font-bold uppercase tracking-wider font-heading">AI Synthesis Terminal</span>
-      </div>
-      <span className="text-[9px] text-cyan-400 font-mono font-bold">GPT-4 Active</span>
-    </div>
-    {/* Terminal Code Lines */}
-    <div className="my-auto font-mono text-[9px] text-slate-300 space-y-2.5 leading-relaxed bg-black/30 p-4 rounded-xl border border-white/5">
-      <p className="text-cyan-400 font-extrabold flex items-center gap-1.5 leading-none">
-        <span>🤖</span> [System] Analyzing statistical parameters...
-      </p>
-      <p className="text-slate-400 leading-normal">
-        <span className="text-indigo-400">✓ Spike:</span> Revenue anomaly of <span className="text-white font-bold">+300%</span> in November verified.
-      </p>
-      <p className="text-slate-400 leading-normal">
-        <span className="text-red-400">⚡ Alert:</span> Row 1024 expense variance exceeds <span className="text-white font-bold">3.2σ</span> (anomaly).
-      </p>
-      <p className="text-slate-400 leading-normal">
-        <span className="text-emerald-400">★ Action:</span> Shift budget allocations to organic digital channels.
-      </p>
-    </div>
-    <div className="text-[10px] text-slate-500 flex justify-between items-center font-bold uppercase">
-      <span>Stream: Secure Vector Sync</span>
-      <span>Calculations Complete</span>
-    </div>
+  <div className="border border-white/5 rounded-[24px] overflow-hidden shadow-2xl bg-slate-950 group">
+    <img 
+      src="/assets/image1.png" 
+      alt="AI Ingestion Insights Dashboard" 
+      className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+    />
   </div>
 );
 
@@ -249,7 +164,7 @@ const HistoryMockup = () => (
 // 6. Exportable Reports Mockup Visual
 const ExportMockup = () => (
   <div className="bg-[#0B0F19]/90 border border-white/10 rounded-2xl p-6 relative overflow-hidden h-[260px] md:h-[280px] flex flex-col justify-between shadow-inner group-hover:border-cyan-500/20 transition-colors duration-300">
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(6,182,212,0.05),transparent_60%)] pointer-events-none" />
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_10%,rgba(6,182,212,0.05),transparent_60%)] pointer-events-none rounded-[2px]" />
     <div className="flex justify-between items-center border-b border-white/5 pb-2.5">
       <span className="text-[10px] text-slate-455 font-bold uppercase tracking-wider font-heading">Exporting Dashboards snapshot</span>
       <span className="text-[9px] text-cyan-400 font-bold">100% Secure</span>
@@ -362,6 +277,22 @@ const Landing = () => {
               <span className="text-slate-700 hidden sm:inline">•</span>
               <span>✓ Free forever plan</span>
             </p>
+          </ScrollReveal>
+
+          {/* Hero Product Mockup */}
+          <ScrollReveal variant="fade-up" delay={0.6}>
+            <div className="relative max-w-5xl mx-auto pt-10 md:pt-16">
+              {/* Radial background glows behind the image */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[70%] bg-gradient-to-tr from-cyan-500/10 to-indigo-500/10 rounded-full blur-[80px] pointer-events-none" />
+              
+              <div className="relative border border-white/10 rounded-[24px] overflow-hidden shadow-[0_0_60px_rgba(6,182,212,0.18)] bg-slate-950/80 backdrop-blur-md transition-transform duration-500 hover:scale-[1.01]">
+                <img 
+                  src="/assets/image1.png" 
+                  alt="ExcelViz Interactive 3D & AI Insights Dashboard" 
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            </div>
           </ScrollReveal>
         </div>
       </section>
@@ -680,10 +611,13 @@ const Landing = () => {
           
           {/* Left: Placeholder Space for 3D explorer interactive element */}
           <ScrollReveal variant="fade-right" className="w-full">
-            <VisualPlaceholder 
-              title="3D Telemetry Interactive Canvas Space"
-              subtitle="Google Imagen 3 Image Asset. Futuristic WebGL three-dimensional coordinate meshes rising translucent glowing cyan, teal, and blue pillars from an obsidian floor."
-            />
+            <div className="border border-white/5 rounded-[24px] overflow-hidden shadow-2xl bg-slate-950 group">
+              <img 
+                src="/assets/image3.png" 
+                alt="3D Telemetry Interactive Canvas Space" 
+                className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+              />
+            </div>
           </ScrollReveal>
 
           {/* Right: Text Content */}
@@ -773,10 +707,13 @@ const Landing = () => {
 
           {/* Right: Asset Placeholder for AI Ingestion */}
           <ScrollReveal variant="fade-left" className="order-1 lg:order-2 w-full">
-            <VisualPlaceholder 
-              title="AI Analytics Summary Panel Asset"
-              subtitle="Google Imagen 3 Image Asset. Holographic, high-contrast abstract prism lens on dark obsidian navy canvas splitting chaotic gray rows into glowing cyan recommendations."
-            />
+            <div className="border border-white/5 rounded-[24px] overflow-hidden shadow-2xl bg-slate-950 group">
+              <img 
+                src="/assets/image1.png" 
+                alt="AI Ingestion Insights Dashboard" 
+                className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+              />
+            </div>
           </ScrollReveal>
 
         </div>

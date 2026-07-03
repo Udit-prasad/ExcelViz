@@ -28,6 +28,16 @@ Use these prompts to generate visual assets for the image placeholders on the la
 *   **Prompt**:
     > *A high-end editorial abstract visual depicting 'Data Intelligence'. On the left, chaotic, flat, dark gray columns of raw spreadsheet figures and numbers. In the center, a glowing prism lens of electric blue light. On the right, the light emerges as perfectly ordered, glowing holographic shapes, structured charts, and neat text lines. The background is a premium dark obsidian. Refined, artistic, clean metaphor, glassmorphism, chromatic aberration on the prism edges, soft volumetric lighting, studio shot, highly conceptual, premium tech branding, 8k.*
 
+### 5. Blog Section Cover Images (Premium Tech Articles)
+*   **Asset Role**: Visual cover images for company blog posts (e.g., transitions from 2D to 3D, AI data insights, WebGL development).
+*   **Prompts**:
+    *   **Topic: "Beyond the Grid: The Shift to 3D Data Visualization"**
+        > *A premium, conceptual digital art piece depicting a transition from traditional flat spreadsheets to multi-dimensional data. In the background, faded, desaturated rows of classic spreadsheet grids. Emerging from the center, a burst of glowing, three-dimensional geometric shapes, neon blue and purple data ribbons, and floating holographic coordinates in a deep obsidian space. Sophisticated composition, clean design, glassmorphism, dynamic lighting, high-tech aesthetic, 8k resolution.*
+    *   **Topic: "AI-Powered Analytics: From Raw Numbers to Instant Insights"**
+        > *An artistic, high-tech depiction of artificial intelligence parsing complex tabular data. A glowing, semi-transparent brain or neural node network constructed from interconnected cyan and green light paths, hovering over a floating grid of digital numbers. Bright light beams scan the grid, highlighting key nodes that transform into mini-graphs. Deep obsidian background, high contrast, clean vector style combined with atmospheric volumetric light, premium editorial illustration, 8k.*
+    *   **Topic: "Mastering WebGL: Rendering High-Performance 3D Charts in React"**
+        > *A developer-focused abstract graphic showing a 3D WebGL coordinate mesh. Glowing wireframes, vertices, and vector arrows form a complex geometric lattice structure in an infinite dark violet and blue space. Floating snippets of clean, stylized React and Three.js code are faintly visible on a glowing translucent glass card. Cinematic depth of field, sharp focus, ray-traced reflections on mesh lines, ultra-modern tech art, 8k.*
+
 ---
 
 ## 📹 Google Veo 3 Prompts (Cinematic Video Generation)

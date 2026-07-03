@@ -3,9 +3,18 @@ const { db } = require('../config/firebase');
 const { readFile, utils } = require('xlsx');
 const { join } = require('path');
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let openai = null;
+if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'your-openai-api-key') {
+  try {
+    openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+  } catch (err) {
+    console.error('Failed to initialize OpenAI client:', err.message);
+  }
+} else {
+  console.warn('OpenAI API Key is missing or using placeholder in backend/.env. AI completion features will use local mathematical engine.');
+}
 
 // Helper function to calculate smart mathematical insights as a fallback
 function computeLocalInsights(jsonData, chartType, xAxis, yAxis) {
@@ -150,6 +159,10 @@ const generateInsights = async (req, res) => {
     
     // Attempt OpenAI completion
     try {
+      if (!openai) {
+        throw new Error('OpenAI client not initialized (missing API key).');
+      }
+
       const dataSummary = {
         totalRows: data.length,
         columns: Object.keys(data[0] || {}),

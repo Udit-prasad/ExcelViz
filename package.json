@@ -19,7 +19,7 @@
     "nodejs",
     "firebase"
   ],
-  "author": "Your Name",
+  "author": "Udit Prasad",
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^7.6.0"

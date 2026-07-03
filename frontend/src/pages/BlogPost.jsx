@@ -16,6 +16,7 @@ const BlogPost = () => {
       role: 'Co-Founder & CEO',
       initial: 'AK',
       gradient: 'from-blue-600 to-cyan-500',
+      image: '/assets/blog image1.png',
       content: (
         <div className="space-y-6">
           <p className="font-body text-slate-300 text-lg leading-relaxed font-semibold">
@@ -64,6 +65,7 @@ const BlogPost = () => {
       role: 'Chief Technical Architect',
       initial: 'SL',
       gradient: 'from-indigo-600 to-blue-500',
+      image: '/assets/blog image 2.png',
       content: (
         <div className="space-y-6">
           <p className="font-body text-slate-300 text-lg leading-relaxed font-semibold">
@@ -104,6 +106,7 @@ camera.lookAt(0, 0, 0);`}
       role: 'Data Systems Specialist',
       initial: 'ET',
       gradient: 'from-purple-600 to-indigo-500',
+      image: '/assets/blog image 3.png',
       content: (
         <div className="space-y-6">
           <p className="font-body text-slate-300 text-lg leading-relaxed font-semibold">
@@ -133,6 +136,7 @@ camera.lookAt(0, 0, 0);`}
       role: 'Lead Frontend Designer',
       initial: 'NR',
       gradient: 'from-cyan-500 to-teal-400',
+      image: '/assets/image1.png',
       content: (
         <div className="space-y-6">
           <p className="font-body text-slate-300 text-lg leading-relaxed font-semibold">
@@ -182,8 +186,13 @@ camera.lookAt(0, 0, 0);`}
     <div className="bg-[#0B0F19] min-h-screen text-slate-200 relative overflow-hidden font-body pt-20">
       
       {/* Article Cover Header */}
-      <div className={`bg-gradient-to-tr ${article.gradient} py-20 md:py-28 relative overflow-hidden text-center text-white`}>
-        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
+      <div className="relative h-[250px] md:h-[400px] w-full overflow-hidden flex items-center justify-center text-center text-white bg-slate-950">
+        <img 
+          src={article.image} 
+          alt={article.title} 
+          className="absolute inset-0 w-full h-full object-cover opacity-40 blur-[2px]" 
+        />
+        <div className="absolute inset-0 bg-slate-950/40 pointer-events-none" />
         <div className="max-w-4xl mx-auto px-6 space-y-6 relative z-10">
           <Link 
             to="/blog"
@@ -191,12 +200,12 @@ camera.lookAt(0, 0, 0);`}
           >
             ← Back to Blog
           </Link>
-          <h1 className="text-3xl sm:text-5xl font-heading font-black leading-tight tracking-tight max-w-3xl mx-auto">
+          <h1 className="text-3xl sm:text-5xl font-heading font-black leading-tight tracking-tight max-w-3xl mx-auto drop-shadow-lg">
             {article.title}
           </h1>
           
           {/* Tag and meta */}
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-black font-heading text-white/90 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-black font-heading text-white/90 pt-2 drop-shadow-md">
             <span className="px-2.5 py-0.5 bg-white/15 border border-white/25 rounded-full uppercase tracking-widest">{article.tag}</span>
             <span>•</span>
             <span>{article.date}</span>
@@ -248,11 +257,12 @@ camera.lookAt(0, 0, 0);`}
                 whileHover={{ y: -4 }}
                 className="bg-[#1E293B]/45 border border-white/5 rounded-2xl overflow-hidden shadow-2xl hover:shadow-[0_0_30px_rgba(6,182,212,0.03)] transition-all duration-300 flex flex-col justify-between group"
               >
-                <div className={`bg-gradient-to-tr ${post.gradient} h-32 flex items-center justify-center p-4 relative overflow-hidden`}>
-                  <div className="absolute inset-0 bg-black/10" />
-                  <svg className="w-8 h-8 text-white opacity-40 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
+                <div className="h-32 w-full relative overflow-hidden bg-slate-950">
+                  <img 
+                    src={post.image} 
+                    alt={post.title} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
                 <div className="p-6 space-y-2.5 flex-1 flex flex-col justify-between">
                   <div className="space-y-2">

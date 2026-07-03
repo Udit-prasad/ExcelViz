@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { auth, db } = require('../config/firebase');
+const { auth, db, isMock } = require('../config/firebase');
 
 const apiKeyMissingMessage = (action) =>
   `Server is missing FIREBASE_WEB_API_KEY inside backend/.env. Please configure this key to enable user ${action}.`;
@@ -10,6 +10,29 @@ const register = async (req, res) => {
 
   if (!name || !email || !password) {
     return res.status(400).json({ msg: 'Name, email, and password are required' });
+  }
+
+  if (isMock) {
+    try {
+      const userRecord = await auth.createUser({
+        email,
+        password,
+        displayName: name
+      });
+
+      res.json({
+        token: `mock-token-${userRecord.uid}`,
+        user: {
+          id: userRecord.uid,
+          name,
+          email
+        }
+      });
+      return;
+    } catch (err) {
+      console.error('Mock Register error:', err.message);
+      return res.status(400).json({ msg: err.message === 'EMAIL_EXISTS' ? 'Email is already registered' : err.message || 'Registration failed' });
+    }
   }
 
   if (!apiKey) {
@@ -54,6 +77,41 @@ const login = async (req, res) => {
 
   if (!email || !password) {
     return res.status(400).json({ msg: 'Email and password are required' });
+  }
+
+  if (isMock) {
+    try {
+      const dbData = require('../config/firebase').isMock ? require('fs').readFileSync(require('path').join(__dirname, '..', 'local_db.json'), 'utf8') : null;
+      const parsedData = dbData ? JSON.parse(dbData) : {};
+      const authUsers = parsedData.authUsers || {};
+      
+      let matchedUser = null;
+      let matchedUid = null;
+      for (const uid in authUsers) {
+        if (authUsers[uid].email === email) {
+          matchedUser = authUsers[uid];
+          matchedUid = uid;
+          break;
+        }
+      }
+
+      if (!matchedUser || matchedUser.password !== password) {
+        return res.status(400).json({ msg: 'Invalid Credentials' });
+      }
+
+      res.json({
+        token: `mock-token-${matchedUid}`,
+        user: {
+          id: matchedUid,
+          name: parsedData.users?.[matchedUid]?.name || 'User',
+          email: matchedUser.email
+        }
+      });
+      return;
+    } catch (err) {
+      console.error('Mock Login error:', err.message);
+      return res.status(500).json({ msg: err.message || 'Authentication failed' });
+    }
   }
 
   if (!apiKey) {
@@ -111,6 +169,11 @@ const forgotPassword = async (req, res) => {
     return res.status(400).json({ msg: 'Email is required' });
   }
 
+  if (isMock) {
+    res.json({ msg: 'Password reset email sent (Mock Sandbox Mode)' });
+    return;
+  }
+
   if (!apiKey) {
     return res.status(400).json({ msg: apiKeyMissingMessage('password reset') });
   }
@@ -133,6 +196,11 @@ const resetPassword = async (req, res) => {
 
   if (!token || !password) {
     return res.status(400).json({ msg: 'Reset token and new password are required' });
+  }
+
+  if (isMock) {
+    res.json({ msg: 'Password reset successful (Mock Sandbox Mode)' });
+    return;
   }
 
   if (!apiKey) {

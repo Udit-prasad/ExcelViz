@@ -1,0 +1,17 @@
+{
+  "authUsers": {
+    "mock-user-dn8ilvdis": {
+      "uid": "mock-user-dn8ilvdis",
+      "email": "prasadudit2006@gmail.com",
+      "password": "Udit@2006"
+    }
+  },
+  "users": {
+    "mock-user-dn8ilvdis": {
+      "name": "Udit Prasad",
+      "email": "prasadudit2006@gmail.com",
+      "createdAt": "2026-07-03T14:07:32.042Z"
+    }
+  },
+  "analyses": {}
+}
