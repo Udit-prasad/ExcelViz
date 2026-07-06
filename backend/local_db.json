@@ -4,6 +4,11 @@
       "uid": "mock-user-dn8ilvdis",
       "email": "prasadudit2006@gmail.com",
       "password": "Udit@2006"
+    },
+    "mock-user-5uy2lzsfk": {
+      "uid": "mock-user-5uy2lzsfk",
+      "email": "prasadudit80@gmail.com",
+      "password": "Udit@2006"
     }
   },
   "users": {
@@ -11,6 +16,17 @@
       "name": "Udit Prasad",
       "email": "prasadudit2006@gmail.com",
       "createdAt": "2026-07-03T14:07:32.042Z"
+    },
+    "mock-google-user": {
+      "name": "Mock Google User",
+      "email": "google-user@example.com",
+      "createdAt": "2026-07-05T15:13:55.338Z",
+      "isPremium": false
+    },
+    "mock-user-5uy2lzsfk": {
+      "name": "Udit Prasad",
+      "email": "prasadudit80@gmail.com",
+      "createdAt": "2026-07-05T15:39:29.498Z"
     }
   },
   "analyses": {}

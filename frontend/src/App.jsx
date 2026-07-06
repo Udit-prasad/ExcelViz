@@ -25,6 +25,7 @@ import Pricing from './pages/Pricing';
 import AboutUs from './pages/AboutUs';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
+import Checkout from './pages/Checkout';
 
 function App() {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -46,6 +47,7 @@ function App() {
     path.startsWith('/blog/') ||
     path === '/login' ||
     path === '/register' ||
+    path === '/checkout' ||
     path === '/reset-password' ||
     path.startsWith('/reset-password/');
 
@@ -84,6 +86,14 @@ function App() {
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route 
+              path="/checkout" 
+              element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="*" element={<Navigate to="/" replace />} />

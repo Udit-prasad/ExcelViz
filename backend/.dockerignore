@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+.env
+.git
+.gitignore
+local_db.json
+uploads/*
+config/firebase-service-account.json
+Dockerfile
+.dockerignore

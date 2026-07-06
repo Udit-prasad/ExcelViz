@@ -1,21 +1,33 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchHistory } from '../features/history/historySlice';
 import { loadExistingAnalysis } from '../features/analysis/analysisSlice';
+import { getProfile } from '../features/auth/authSlice';
 import ProfileCard from '../components/ProfileCard';
 import InsightCard from '../components/InsightCard';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Dashboard = () => {
   const { user } = useSelector((state) => state.auth);
   const { history } = useSelector((state) => state.history);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
 
   useEffect(() => {
     dispatch(fetchHistory());
-  }, [dispatch]);
+
+    const queryParams = new URLSearchParams(window.location.search);
+    const paymentStatus = queryParams.get('payment');
+    if (paymentStatus === 'success' || paymentStatus === 'simulated') {
+      setShowPaymentSuccess(true);
+      dispatch(getProfile());
+      
+      // Clean query parameters from URL securely without loops
+      navigate('/dashboard', { replace: true });
+    }
+  }, [dispatch, navigate]);
 
   const stats = {
     totalAnalyses: history.length,
@@ -88,7 +100,7 @@ const Dashboard = () => {
           <div>
             <p className="text-[9px] font-heading font-black text-slate-500 uppercase tracking-widest mb-0.5">Account Status</p>
             <p className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
-              {user?.isAdmin ? 'Pro Administrator' : 'Standard Trial'}
+              {user?.isPremium ? 'Premium Pro Member' : user?.isAdmin ? 'Pro Administrator' : 'Standard Trial'}
             </p>
           </div>
         </motion.div>
@@ -249,6 +261,48 @@ const Dashboard = () => {
           </motion.div>
         </div>
       </div>
+      
+      <AnimatePresence>
+        {showPaymentSuccess && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowPaymentSuccess(false)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="w-full max-w-md bg-[#0F172A] border border-emerald-500/30 rounded-[32px] p-8 shadow-2xl relative z-10 text-center overflow-hidden"
+            >
+              <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none" />
+
+              <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto mb-6 shadow-lg shadow-emerald-500/15">
+                <svg className="w-8 h-8 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+
+              <h3 className="text-2xl font-heading font-black tracking-tight text-white mb-3">
+                Upgrade Confirmed!
+              </h3>
+              <p className="font-body text-slate-400 text-xs sm:text-sm leading-relaxed mb-6">
+                Congratulations! Your account has been upgraded to <strong className="text-cyan-400">ExcelViz Pro Plan</strong>. All premium telemetry grids, spatial 3D WebGL charts, and unlimited AI analytics are now unlocked.
+              </p>
+
+              <button
+                onClick={() => setShowPaymentSuccess(false)}
+                className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white py-3.5 rounded-xl font-heading font-extrabold text-xs uppercase tracking-widest shadow-lg shadow-emerald-500/15 transition-all"
+              >
+                Launch Workspace
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

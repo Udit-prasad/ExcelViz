@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SectionHeader, CTABanner } from '../components/MarketingUIComponents';
 import { ScrollReveal, StaggerContainer } from '../components/ScrollReveal';
 
 const Pricing = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const [billingInterval, setBillingInterval] = useState('yearly'); // default to 'yearly' for better conversion
   const [activeFaq, setActiveFaq] = useState(null);
 
@@ -38,8 +40,8 @@ const Pricing = () => {
     {
       title: 'Pro',
       subtitle: 'For power users & analysts',
-      priceMonthly: 10,
-      priceYearly: 5, // $5 * 12 = $60/yr
+      priceMonthly: 999,
+      priceYearly: 499, // ₹499 * 12 = ₹5,988/yr
       features: [
         'Unlimited sheet uploads',
         '2D + Spatial 3D WebGL charts',
@@ -170,6 +172,22 @@ const Pricing = () => {
             const isYearly = billingInterval === 'yearly';
             const price = isYearly ? plan.priceYearly : plan.priceMonthly;
 
+            let ctaTarget = plan.ctaHref;
+            let ctaLabel = plan.ctaText;
+
+            if (isAuthenticated) {
+              if (plan.title === 'Free') {
+                ctaTarget = '/dashboard';
+                ctaLabel = 'Go to Dashboard';
+              } else if (plan.title === 'Pro') {
+                ctaTarget = `/checkout?plan=pro&interval=${billingInterval}`;
+                ctaLabel = 'Upgrade to Pro';
+              } else if (plan.title === 'Enterprise') {
+                ctaTarget = '/profile';
+                ctaLabel = 'Contact Support';
+              }
+            }
+
             return (
               <ScrollReveal key={index} variant="fade-up" delay={index * 0.1} className="w-full h-full">
                 <motion.div
@@ -194,7 +212,7 @@ const Pricing = () => {
                     {/* Price display */}
                     <div className="flex items-baseline gap-1 mb-6">
                       <span className="text-4xl sm:text-5xl font-heading font-black text-white">
-                        {typeof price === 'number' ? `$${price}` : price}
+                        {typeof price === 'number' ? `₹${price}` : price}
                       </span>
                       {typeof price === 'number' && (
                         <span className="text-xs text-slate-500 font-bold uppercase tracking-wider font-body">/ month</span>
@@ -204,7 +222,7 @@ const Pricing = () => {
                     {/* Pricing billing interval label */}
                     {isYearly && typeof price === 'number' && (
                       <p className="text-[10px] text-cyan-400 font-bold mb-6 font-heading uppercase tracking-widest">
-                        Billed annually (${price * 12}/yr)
+                        Billed annually (₹{price * 12}/yr)
                       </p>
                     )}
                     {!isYearly && typeof price === 'number' && (
@@ -230,10 +248,10 @@ const Pricing = () => {
                   <div className="pt-8">
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                       <Link
-                        to={plan.ctaHref}
+                        to={ctaTarget}
                         className={`w-full text-center py-3.5 rounded-xl font-heading text-xs font-extrabold uppercase tracking-wider transition-all block ${plan.buttonStyle}`}
                       >
-                        {plan.ctaText}
+                        {ctaLabel}
                       </Link>
                     </motion.div>
                   </div>

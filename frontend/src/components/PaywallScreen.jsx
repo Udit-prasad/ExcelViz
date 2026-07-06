@@ -9,29 +9,8 @@ const PaywallScreen = () => {
   const token = useSelector((state) => state.auth.token) || localStorage.getItem('token');
   const [loading, setLoading] = useState(false);
 
-  const handleUpgrade = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        `${API_URL}/payment/create-checkout-session`,
-        {},
-        {
-          headers: {
-            'x-auth-token': token,
-          },
-        }
-      );
-      
-      // Redirect to Stripe Checkout or simulated sandbox dashboard success url
-      if (response.data.url) {
-        window.location.href = response.data.url;
-      }
-    } catch (err) {
-      console.error('Checkout error:', err);
-      alert('Failed to initiate secure upgrade session. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+  const handleUpgrade = () => {
+    window.location.href = '/checkout?plan=pro&interval=yearly';
   };
 
   return (

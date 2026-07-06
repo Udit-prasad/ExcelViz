@@ -14,33 +14,8 @@ const SubscriptionModal = ({ isOpen, onClose, title = "Upgrade to ExcelViz Pro" 
 
   if (!isOpen) return null;
 
-  const handleUpgrade = async () => {
-    setLoading(true);
-    try {
-      // Simulate upgrading/payment or trigger actual checkout
-      const response = await axios.post(
-        `${API_URL}/payment/create-checkout-session`,
-        { billingCycle },
-        {
-          headers: {
-            'x-auth-token': token,
-          },
-        }
-      );
-      
-      if (response.data.url) {
-        window.location.href = response.data.url;
-      } else {
-        // Fallback or local state refresh
-        dispatch(getProfile());
-        onClose();
-      }
-    } catch (err) {
-      console.error('Checkout error:', err);
-      alert('Failed to initiate secure upgrade session. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+  const handleUpgrade = () => {
+    window.location.href = `/checkout?plan=pro&interval=${billingCycle}`;
   };
 
   return (
