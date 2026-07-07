@@ -218,8 +218,21 @@ if (!isMock) {
       }
       const uid = token.replace('mock-token-', '');
       const dbData = readDb();
-      const user = dbData.users?.[uid];
-      if (!user) throw new Error('User not found or token expired');
+      let user = dbData.users?.[uid];
+      
+      // Self-healing: if the stateless server restarted and wiped local_db.json, auto-recreate the mock user
+      if (!user) {
+        user = {
+          name: 'Demo Pro Analyst',
+          email: 'demo.user@excelviz.com',
+          isPremium: true,
+          createdAt: new Date().toISOString()
+        };
+        if (!dbData.users) dbData.users = {};
+        dbData.users[uid] = user;
+        writeDb(dbData);
+      }
+
       return {
         uid,
         email: user.email,
