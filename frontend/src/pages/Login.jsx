@@ -41,10 +41,10 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-white text-slate-800 font-body">
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-[#0A0E17] text-white font-body">
       
-      {/* LEFT SIDE: Clean white login form (5 columns on desktop) */}
-      <div className="lg:col-span-5 flex flex-col justify-between p-8 sm:p-12 md:p-16 lg:p-20 bg-white">
+      {/* LEFT SIDE: Sleek dark login form (5 columns on desktop) */}
+      <div className="lg:col-span-5 flex flex-col justify-between p-8 sm:p-12 md:p-16 lg:p-20 bg-[#0A0E17] border-r border-white/5">
         
         {/* Header Logo */}
         <Link to="/" className="flex items-center gap-3 group self-start">
@@ -59,10 +59,10 @@ const Login = () => {
         {/* Core Form Card */}
         <div className="w-full max-w-md mx-auto py-12 lg:py-0">
           <div className="space-y-2 mb-8">
-            <h2 className="text-3xl font-heading font-extrabold tracking-tight text-slate-900">
+            <h2 className="text-3xl font-heading font-extrabold tracking-tight text-white">
               Welcome back
             </h2>
-            <p className="text-sm text-slate-500 font-semibold">
+            <p className="text-sm text-slate-400 font-semibold">
               Log in to your ExcelViz account to reload your analysis logs
             </p>
           </div>
@@ -71,9 +71,9 @@ const Login = () => {
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }} 
               animate={{ opacity: 1, scale: 1 }} 
-              className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6"
+              className="bg-red-950/20 border border-red-500/30 rounded-xl p-4 mb-6"
             >
-              <p className="text-sm text-red-600 font-bold">{error}</p>
+              <p className="text-sm text-red-400 font-bold">{error}</p>
             </motion.div>
           )}
 
@@ -90,7 +90,7 @@ const Login = () => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-slate-200 bg-white rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600/25 focus:border-blue-600 transition-all text-sm font-semibold"
+                className="w-full px-4 py-3 border border-white/10 bg-slate-900/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm font-semibold"
                 placeholder="name@company.com"
               />
             </div>
@@ -102,7 +102,7 @@ const Login = () => {
                 </label>
                 <Link
                   to="/reset-password"
-                  className="text-xs font-heading font-bold text-blue-600 hover:text-blue-700 transition-colors"
+                  className="text-xs font-heading font-bold text-blue-400 hover:text-blue-300 transition-colors"
                 >
                   Forgot password?
                 </Link>
@@ -115,7 +115,7 @@ const Login = () => {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-slate-200 bg-white rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600/25 focus:border-blue-600 transition-all text-sm font-semibold"
+                className="w-full px-4 py-3 border border-white/10 bg-slate-900/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm font-semibold"
                 placeholder="••••••••"
               />
             </div>
@@ -138,11 +138,11 @@ const Login = () => {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-slate-500 font-body">
+        <p className="text-center text-xs text-slate-400 font-body">
           Don't have an account?{' '}
           <Link
             to="/register"
-            className="font-bold text-blue-600 hover:text-blue-700 hover:underline"
+            className="font-bold text-blue-400 hover:text-blue-300 hover:underline"
           >
             Sign up free →
           </Link>

@@ -91,10 +91,10 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-white text-slate-800 font-body">
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-[#0A0E17] text-white font-body">
       
-      {/* LEFT SIDE: Clean white register form (5 columns on desktop) */}
-      <div className="lg:col-span-5 flex flex-col justify-between p-8 sm:p-12 md:p-16 lg:p-20 bg-white">
+      {/* LEFT SIDE: Sleek dark register form (5 columns on desktop) */}
+      <div className="lg:col-span-5 flex flex-col justify-between p-8 sm:p-12 md:p-16 lg:p-20 bg-[#0A0E17] border-r border-white/5">
         
         {/* Header Logo */}
         <Link to="/" className="flex items-center gap-3 group self-start">
@@ -109,10 +109,10 @@ const Register = () => {
         {/* Core Form Card */}
         <div className="w-full max-w-md mx-auto py-12 lg:py-0">
           <div className="space-y-2 mb-8">
-            <h2 className="text-3xl font-heading font-extrabold tracking-tight text-slate-900">
+            <h2 className="text-3xl font-heading font-extrabold tracking-tight text-white">
               Create your free account
             </h2>
-            <p className="text-sm text-slate-500 font-semibold">
+            <p className="text-sm text-slate-400 font-semibold">
               Get started with your 14-day Pro tier free trial today
             </p>
           </div>
@@ -121,9 +121,9 @@ const Register = () => {
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }} 
               animate={{ opacity: 1, scale: 1 }} 
-              className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6"
+              className="bg-red-950/20 border border-red-500/30 rounded-xl p-4 mb-6"
             >
-              <p className="text-sm text-red-600 font-bold">{error}</p>
+              <p className="text-sm text-red-400 font-bold">{error}</p>
             </motion.div>
           )}
 
@@ -131,9 +131,9 @@ const Register = () => {
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }} 
               animate={{ opacity: 1, scale: 1 }} 
-              className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6"
+              className="bg-amber-950/20 border border-amber-500/30 rounded-xl p-4 mb-6"
             >
-              <p className="text-sm text-amber-700 font-bold">{passwordError}</p>
+              <p className="text-sm text-amber-400 font-bold">{passwordError}</p>
             </motion.div>
           )}
 
@@ -150,7 +150,7 @@ const Register = () => {
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-slate-200 bg-white rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600/25 focus:border-blue-600 transition-all text-sm font-semibold"
+                className="w-full px-4 py-3 border border-white/10 bg-slate-900/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm font-semibold"
                 placeholder="Enter your full name"
               />
             </div>
@@ -167,7 +167,7 @@ const Register = () => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-slate-200 bg-white rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600/25 focus:border-blue-600 transition-all text-sm font-semibold"
+                className="w-full px-4 py-3 border border-white/10 bg-slate-900/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm font-semibold"
                 placeholder="name@company.com"
               />
             </div>
@@ -184,7 +184,7 @@ const Register = () => {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-slate-200 bg-white rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600/25 focus:border-blue-600 transition-all text-sm font-semibold"
+                className="w-full px-4 py-3 border border-white/10 bg-slate-900/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm font-semibold"
                 placeholder="••••••••"
               />
 
@@ -195,7 +195,7 @@ const Register = () => {
                     <span>Password Strength:</span>
                     <span className="uppercase tracking-wider font-extrabold">{passwordStrength.label}</span>
                   </div>
-                  <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
                     <div 
                       className={`h-full transition-all duration-300 ${passwordStrength.color}`}
                       style={{ width: `${(passwordStrength.score / 5) * 100}%` }}
@@ -217,7 +217,7 @@ const Register = () => {
                 required
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-slate-200 bg-white rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600/25 focus:border-blue-600 transition-all text-sm font-semibold"
+                className="w-full px-4 py-3 border border-white/10 bg-slate-900/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-sm font-semibold"
                 placeholder="••••••••"
               />
             </div>
@@ -230,7 +230,7 @@ const Register = () => {
                 type="checkbox"
                 checked={agreedToTerms}
                 onChange={(e) => setAgreedToTerms(e.target.checked)}
-                className="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                className="mt-1 h-4 w-4 rounded border-slate-700 bg-slate-900 text-blue-600 focus:ring-blue-500"
               />
               <label htmlFor="agreedToTerms" className="text-xs text-slate-500 font-semibold leading-relaxed">
                 I agree to the{' '}
